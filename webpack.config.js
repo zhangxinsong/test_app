@@ -38,7 +38,12 @@ const config = {
             {
                 test: /\.(le|c)ss$/, // 处理css、less文件
                 use: [
-                    {loader: MiniCssExtractPlugin.loader },
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '../'
+                        }
+                    },
                     {loader: "css-loader" },
                     {loader: "less-loader" },
                     {
@@ -57,7 +62,7 @@ const config = {
                         loader: 'url-loader',
                         options: {
                             limit: 1024,
-                            name: 'img/[name].[ext]'
+                            name: 'images/[name].[ext]'
                         }
                     }
                 ],
@@ -81,7 +86,8 @@ const config = {
             chunkFilename: "css/[id].css"
         })
     ],
-    optimization: {  
+    optimization: {
+
     },
     performance: {
 		hints: 'warning', // 枚举

@@ -1,5 +1,5 @@
 <template>
-    <div class="big">
+    <div class="container">
         <!-- <div></div> -->
         <router-view></router-view>
     </div>    
@@ -17,9 +17,9 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-    .big{
-        width: 500px;
-        height: 600px;
-        background: red;
+    .container{
+        width: 100%;
+        height: 100%;
+        background: #f5f5f5;
     }
 </style>

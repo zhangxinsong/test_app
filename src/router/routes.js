@@ -1,10 +1,14 @@
-import one from '../components/one.vue';
+import firstPage from 'Components/firstPage/firstPage.vue';
+import my from 'Components/my/my.vue';
 
 export default[{
     path: '',
-    component: one,
-    redirect: '/one'
+    component: firstPage,
+    redirect: '/firstPage'
 },{
-    path: '/one',
-    component: one
+    path: '/firstPage',
+    component: firstPage
+},{
+    path: '/conferenceMy',
+    component: my
 }]
