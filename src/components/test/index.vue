@@ -2,29 +2,19 @@
     <div class="question">
         <transition name="slide-fade">
             <router-view class="router-view"></router-view>
-                    </transition>
-            <fs-share rangs="5,6"
-            :rangeData="rangeData"
-            :showBoard="showShareBoard"
-            @shareBoardState="shareBoardState" />
-        </div>
+        </transition>
+    </div>
 </template>
 <script>
-import FsShare from "../common/share";
 export default {
-    components:{
-		FsShare,
-	},
     data(){ 
         return {
-            showShareBoard: false,
             rangeData: {},
             exam: {},
             examId: ''
         }
     },
-    computed:{
-        
+    computed:{ 
     },
     methods: {
         getExam(){
@@ -46,38 +36,10 @@ export default {
                 }
             })
         },
-        share() { // 分享
-            this.showShareBoard = true;
-            this.rangeData = {
-                title: '答题',
-                zoneTitle: '答题',
-                content: '啦啦啦',
-                url: window.location.href,
-                imgUrl: "https://ykj-yyim-test.oss-cn-beijing.aliyuncs.com/conference/2018/08/31/16/39/a56ab240-d353-4e59-be3b-9585406cfad6.png",
-            };
-        },
-        shareBoardState(params) {
-            this.showShareBoard = params;
-        },
-        configNavBar() { // 配置导航栏
-            let	rightItems = {
-                title: this.$t("html5.share"),
-                call: () => {
-                    this.share();
-                }
-            }
-            G.BRIDGE.changeTitle({
-                centerItems: {
-                    title: "答题"
-                },
-                rightItems: rightItems
-            });
-        },
     },
     created(){
         this.examId = this.$route.query.examId;
         this.getExam();
-        this.configNavBar();
     }
 }
 </script>

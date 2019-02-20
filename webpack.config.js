@@ -102,7 +102,7 @@ if(ENV == 'development'){  //开发模式
     config.devtool = 'cheap-module-eval-source-map'; // 调试代码时可以看到自己原本的代码，而不是编译后的
     config.mode = 'development'; //webpack 开发模式 --mode
     config.devServer = {
-        port: 8000,
+        port: 8080,
         host: 'localhost',
         overlay: {
             errors: true // 将webpack编译的错误显示在网页上面
