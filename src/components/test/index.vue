@@ -18,22 +18,18 @@ export default {
     },
     methods: {
         getExam(){
-            this.$ajax({
-                url:`/conference/rest/v1/answer/exam/${this.examId}`,
-                type: 'get',
-                success(res){
-                    let now = new Date().valueOf();
-                    let date = JSON.parse(res);
-                    this.exam = date;
-                    if(now < date.startTime){
-                        G.UI.say('考试还未开始');
-                    }else if(now > date.endTime){
-                        G.UI.say('考试已经结束');
-                    }
-                },
-                error(err){
-                    G.UI.say();
+            var memberId = localStorage.getItem("memberId");
+            this.$ajax.get(`/rest/v1/answer/exam/${this.examId}?memberId=${memberId}`,{
+            }).then(res => {
+                let now = new Date().valueOf();
+                this.exam = res;
+                if(now < res.startTime){
+                    this.$tip.say('考试还未开始');
+                }else if(now > res.endTime){
+                    this.$tip.say('考试已经结束');
                 }
+            }).catch(err => {
+                console.log(err);
             })
         },
     },

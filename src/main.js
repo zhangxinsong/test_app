@@ -5,8 +5,12 @@ import axios from './config/ajax';
 import ui from './global-ui';
 
 import 'Assets/css/index.less';
+import './directives/load.js'; 
+import 'mint-ui/lib/style.css';//引入mint-ui的css
 
-import './directives/load.js';
+import { Field, DatetimePicker  } from 'mint-ui';
+Vue.component(Field.name, Field);
+Vue.component(DatetimePicker.name, DatetimePicker);
 
 Vue.prototype.$ajax = axios;
 Vue.prototype.$tip = ui;

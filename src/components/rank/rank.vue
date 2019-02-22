@@ -11,8 +11,8 @@
                 <span class="rankTime">{{examType == 'SCORE' ? item.totalScore : (item.totalTime/1000).toFixed(2)+'s' }}</span>
             </li>
         </ul>
-        <div v-else>
-            zanwushuju
+        <div v-else class="nodata">
+            暂无数据
         </div>
     </div>
 </template>
@@ -25,13 +25,13 @@ export default {
     },
     computed:{
         examType(){
-            return this.$parent.exam.examType;
+            return this.$route.query.examType;
         }
     },
     methods: {
         gitRankList(){
             this.$ajax({
-                url:`/conference/rest/v1/answer/exam/result/${this.$parent.examId}/${this.examType == 'SCORE'? 'score':'speed'}/seniority`,
+                url:`/rest/v1/answer/exam/result/${this.$route.query.examId}/${this.examType == 'SCORE'? 'score':'speed'}/seniority`,
                 type: 'get',
                 success(res){
                     let date = JSON.parse(res);
@@ -56,7 +56,7 @@ export default {
         position: relative;
         .header-img{
             width: 100%;
-            height: 120px;
+            height: 160px;
             background: url('../../assets/images/question/top_pic1_new.png');
             background-size: 100% 100%;
         }
@@ -103,6 +103,11 @@ export default {
                 }
             }
         }
-        
+        .nodata{
+            text-align: center;
+            color: #f86767;
+            font-size: 3.2rem;
+            line-height: 3.2rem;
+        }
     }
 </style>

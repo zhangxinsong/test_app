@@ -140,28 +140,26 @@ export default {
             });
         },
         getFirstQuestion(){  //获取第一道题
-            this.$ajax({
-                url:`/conference/rest/v1/answer/exam/${this.$parent.examId}/start`,
-                type: 'get',
-                success(res){
-                    let data = JSON.parse(res);
-                    this.$nextTick(()=>{
-                        this.title = data.description;
-                        this.questionType = data.questionType;
-                        this.questionId = data.questionId; 
-                        this.sequence = data.sequence;
-                        Object.keys(data.question).map((key,i)=>{
-                            this.options.push({label:data.question[key],value:key});
-                        })
-                    });
-                    this.questionIndex++;
-                }
+            var memberId = localStorage.getItem("memberId");
+            this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/start?memberId=${memberId}`,{
+
+            }).then(res => {
+                // this.$nextTick(()=>{
+                //     this.title = data.description;
+                //     this.questionType = data.questionType;
+                //     this.questionId = data.questionId; 
+                //     this.sequence = data.sequence;
+                //     Object.keys(data.question).map((key,i)=>{
+                //         this.options.push({label:data.question[key],value:key});
+                //     })
+                // });
+                // this.questionIndex++;
             })
         },
         nextQuestion(){  //最后一题
             if(this.questionIndex == this.questionCount){
                 this.$ajax({
-                    url:`/conference/rest/v1/answer/exam/${this.$parent.examId}/speed/end/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}`,
+                    url:`/rest/v1/answer/exam/${this.$parent.examId}/speed/end/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}`,
                     type: 'get',
                     data: this.questionType == 'SINGLE' ? {userAnswers:[this.singleAnswer]} : {userAnswers:this.multipleAnswer},
                     success(res){
@@ -175,7 +173,7 @@ export default {
                 })
             }else{   //下一题
                 this.$ajax({
-                    url:`/conference/rest/v1/answer/exam/${this.$parent.examId}/speed/next/${this.questionId}/${this.questionIndex}?sequence=${this.sequence}`,
+                    url:`/rest/v1/answer/exam/${this.$parent.examId}/speed/next/${this.questionId}/${this.questionIndex}?sequence=${this.sequence}`,
                     type: 'get',
                     data: this.questionType == 'SINGLE' ? {userAnswers:[this.singleAnswer]} : {userAnswers:this.multipleAnswer},
                     success(res){

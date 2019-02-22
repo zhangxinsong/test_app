@@ -10,7 +10,6 @@
         </div>
         <div class="btnGroup">
             <div class="startExam" @click="toDoing"></div>
-            <div class="rankList" @click="toRank"></div>
         </div>
     </div>
 </template>
@@ -33,11 +32,11 @@ export default {
         toDoing(){
             if(this.$parent.exam.examType == "SPEED"){
                 this.$router.push({
-                    path: 'speed'
+                    path: '/test/speed'
                 })
             }else{
                 this.$router.push({
-                    path: 'score'
+                    path: '/test/score'
                 })
             }
         },
@@ -74,8 +73,7 @@ export default {
             border-radius: 5px;
             position: relative;
             img{
-                width: 150px;
-                height: 30px;
+                width: 200px;
                 position: absolute;
                 top:-15px; 
                 left:50%;
@@ -83,32 +81,24 @@ export default {
             }
             .regulation{
                 position: absolute;
-                top: 25px;bottom: 10px;
+                top: 30px;bottom: 10px;
                 right: 8px;left: 12px;
                 color: #FFF;
-                font-size: 16px;
+                font-size: 2.6rem;
                 line-height: 22px;
                 overflow-y: scroll; 
             }
         }
         .btnGroup{
             text-align: center;
-            margin-top: 40px;
+            margin-top: 50px;
             .startExam{
                 display: inline-block;
-                width: 125px;
-                height: 45px;
+                width: 46%;
+                height: 80px;
                 background: url('../../assets/images/question/btn_begin_exam.png');
                 background-size: cover;
                 animation: myfirst 1s infinite linear;
-            }
-            .rankList{
-                display: inline-block;
-                width: 125px;
-                height: 45px;
-                background: url('../../assets/images/question/btn_hero_ranks.png');
-                background-size: cover;
-                margin-left: 20px;
             }
         }
     }

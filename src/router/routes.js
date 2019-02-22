@@ -1,5 +1,6 @@
 import firstPage from 'Components/firstPage/firstPage.vue';
 import my from 'Components/my/my.vue';
+import myEdit from 'Components/my/myEdit.vue';
 import login from 'Components/login/login.vue';
 import signin from 'Components/signin/signin.vue';
 import forget from 'Components/forget/forget.vue';
@@ -16,6 +17,7 @@ export default[{
     redirect: '/firstPage'
 },{
     path: '/login',
+    name: 'login',
     component: login
 },{
     path: '/signin',
@@ -27,8 +29,11 @@ export default[{
     path: '/firstPage',
     component: firstPage
 },{
-    path: '/conferenceMy',
+    path: '/my',
     component: my
+},{
+    path: '/myEdit',
+    component: myEdit
 },{
     path: '/rank',
     component: rank
