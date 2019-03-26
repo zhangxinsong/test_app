@@ -124,6 +124,7 @@ export default {
             this.isTip = true;
             let timer = setTimeout(()=>{
                 this.isTip = false;
+                console.log(this.isEnd)
                 if(this.isEnd){
                     this.$router.push({
                         path: 'end',
@@ -142,56 +143,47 @@ export default {
         getFirstQuestion(){  //获取第一道题
             var memberId = localStorage.getItem("memberId");
             this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/start?memberId=${memberId}`,{
-
             }).then(res => {
-                // this.$nextTick(()=>{
-                //     this.title = data.description;
-                //     this.questionType = data.questionType;
-                //     this.questionId = data.questionId; 
-                //     this.sequence = data.sequence;
-                //     Object.keys(data.question).map((key,i)=>{
-                //         this.options.push({label:data.question[key],value:key});
-                //     })
-                // });
-                // this.questionIndex++;
+                this.$nextTick(()=>{
+                    this.title = res.description;
+                    this.questionType = res.questionType;
+                    this.questionId = res.questionId; 
+                    this.sequence = res.sequence;
+                    Object.keys(res.question).map((key,i)=>{
+                        this.options.push({label:res.question[key],value:key});
+                    })
+                });
+                this.questionIndex++;
             })
         },
         nextQuestion(){  //最后一题
+            var memberId = localStorage.getItem("memberId");
             if(this.questionIndex == this.questionCount){
-                this.$ajax({
-                    url:`/rest/v1/answer/exam/${this.$parent.examId}/speed/end/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}`,
-                    type: 'get',
-                    data: this.questionType == 'SINGLE' ? {userAnswers:[this.singleAnswer]} : {userAnswers:this.multipleAnswer},
-                    success(res){
-                        clearInterval(this.globalTimer);
-                        this.isEnd = true;
-                        this.tipRightTimer();
-                    },
-                    error(err){
-                        this.tipWrongTimer()
-                    }
+                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/speed/end/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
+                }).then(res => {
+                    clearInterval(this.globalTimer);
+                    console.log("Sss")
+                    this.isEnd = true;
+                    this.tipRightTimer();
+                }).catch(err =>{
+                    this.tipWrongTimer()
                 })
             }else{   //下一题
-                this.$ajax({
-                    url:`/rest/v1/answer/exam/${this.$parent.examId}/speed/next/${this.questionId}/${this.questionIndex}?sequence=${this.sequence}`,
-                    type: 'get',
-                    data: this.questionType == 'SINGLE' ? {userAnswers:[this.singleAnswer]} : {userAnswers:this.multipleAnswer},
-                    success(res){
-                        this.tipRightTimer();
-                        let data = JSON.parse(res);
-                        this.title = data.description;
-                        this.questionType = data.questionType;
-                        this.questionId = data.questionId;
-                        this.options = [];
-                        this.multipleAnswer = [];
-                        Object.keys(data.question).map((key,i)=>{
-                            this.options.push({label:data.question[key],value:key});
-                        });
-                        this.questionIndex++;
-                    },
-                    error(err){
-                        this.tipWrongTimer()
-                    }
+                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/speed/next/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
+                }).then(res => {
+                    this.tipRightTimer();
+                    let data = JSON.parse(res);
+                    this.title = data.description;
+                    this.questionType = data.questionType;
+                    this.questionId = data.questionId;
+                    this.options = [];
+                    this.multipleAnswer = [];
+                    Object.keys(data.question).map((key,i)=>{
+                        this.options.push({label:data.question[key],value:key});
+                    });
+                    this.questionIndex++;
+                }).catch(err => {
+                    this.tipWrongTimer()
                 })
             }  
         }
@@ -235,41 +227,41 @@ export default {
         }
         .timing{
             width: 100%;
-            height: 70px;
+            height: 100px;
             background: #fa4c21;
             text-align: center;
             padding: 12px 0;
             .s{
                 display: inline-block;
                 padding: 0 15px;
-                height: 45px;
+                height: 75px;
                 background: #fff;
                 border-radius: 6px;
                 color: #fa4c21;
                 text-align: center;
-                font-size: 25px;
-                line-height: 45px;
+                font-size: 5rem;
+                line-height: 75px;
                 vertical-align: bottom;
             }
             .d{
-                width: 6px;
-                height: 6px;
+                width: 12px;
+                height: 12px;
                 padding: 0;
-                border-radius: 2px;
+                border-radius: 6px;
             }
             .ms{
 
             }
             .dw{
                 display: inline-block;
-                font-size: 35px;
+                font-size: 7.4rem;
                 color: #fff;
                 vertical-align: bottom;
             }
         }
         .content{
             position: absolute;
-            top: 70px; bottom: 0;
+            top: 100px; bottom: 0;
             right: 0;left: 0;
             background: #FFF;
             .confirmMu{
@@ -294,6 +286,19 @@ export default {
 </style>
 <style lang="less">
     .question-doing{
+        .mint-radio{
+            display: inline-block;
+            width: 20px;
+        }
+        .mint-radio-label{
+            display: inline-block;
+            width: 90%;
+            font-size: 3.6rem;
+            line-height: 3.2rem;
+        }
+        .mint-radiolist-label{
+            padding: 10px;
+        }
         .mint-checklist-label{
             padding: 10px;
         }
@@ -304,9 +309,11 @@ export default {
         .mint-checkbox-label{
             display: inline-block;
             width: 90%;
+            font-size: 3.6rem;
+            line-height: 3.2rem;
         }
         .mint-checklist-title{
-            font-size: 20px;
+            font-size: 4.6rem;
         }
         .mint-cell{
             background-color: transparent;
@@ -319,7 +326,7 @@ export default {
             background: #fff;
         }
         .mint-radiolist-title{
-            font-size: 20px;
+            font-size: 4.6rem;
         }
         .mint-checkbox-core{
             border-radius: 4px;

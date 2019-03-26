@@ -32,14 +32,9 @@ export default {
         gitRankList(){
             this.$ajax({
                 url:`/rest/v1/answer/exam/result/${this.$route.query.examId}/${this.examType == 'SCORE'? 'score':'speed'}/seniority`,
-                type: 'get',
-                success(res){
-                    let date = JSON.parse(res);
-                    this.rankList = date;
-                },
-                error(err){
-                    G.UI.say();
-                }
+                type: 'get'
+            }).then(res => {
+                this.rankList = res;
             })
         }
     },
@@ -56,42 +51,37 @@ export default {
         position: relative;
         .header-img{
             width: 100%;
-            height: 160px;
+            height: 200px;
             background: url('../../assets/images/question/top_pic1_new.png');
             background-size: 100% 100%;
         }
         ul{
             position: absolute;
-            top: 120px;bottom: 0;
+            top: 200px;bottom: 0;
             right: 0;left: 0;
             overflow-y: scroll;
             li{
-                height: 60px;
+                height: 80px;
                 border-bottom: 1px #f3f3f3 solid;
                 position: relative;
-                font-size: 16px;
+                font-size: 3rem;
                 img{
-                    position: absolute;
-                    width: 50px;
-                    height: 50px;
-                    left: 10px;
-                    top: 6px;
+                    width: 80px;
+                    height: 80px;
                 }
                 .rankIndex{
                     position: absolute;
-                    width: 50px;
-                    height: 50px;
-                    left: 10px;
-                    top: 6px;
+                    width: 80px;
+                    height: 80px;
                     text-align: center;
-                    line-height: 50px;
+                    line-height: 80px;
                     color: #fbf650;
                 }
                 .rankName{
                     position: absolute;
-                    left: 65px;right: 95px;
+                    left: 90px;right: 95px;
                     top: 0;
-                    line-height: 60px;
+                    line-height: 80px;
                 }
                 .rankTime{
                     position: absolute;
@@ -99,15 +89,15 @@ export default {
                     top: 0;
                     width: 80px;
                     text-align: right;
-                    line-height: 60px;
+                    line-height: 80px;
                 }
             }
         }
         .nodata{
             text-align: center;
             color: #f86767;
-            font-size: 3.2rem;
-            line-height: 3.2rem;
+            font-size: 3.6rem;
+            line-height: 3.6rem;
         }
     }
 </style>

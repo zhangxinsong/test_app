@@ -111,21 +111,19 @@ export default {
             });
         },
         getFirstQuestion(){  //获取第一道题
-            this.$ajax({
-                url:`/conference/rest/v1/answer/exam/${this.$parent.examId}/start`,
-                type: 'get',
-                success(res){
-                    let data = JSON.parse(res);
-                    this.$nextTick(()=>{
-                        this.title = data.description;
-                        this.questionType = data.questionType;
-                        this.questionId = data.questionId; 
-                        this.sequence = data.sequence;
-                        Object.keys(data.question).map((key,i)=>{
-                            this.options.push({label:data.question[key],value:key});
-                        })
-                    });
-                }
+            var memberId = localStorage.getItem("memberId");
+            this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/start?memberId=${memberId}`,{
+            }).then(res => {
+                this.$nextTick(()=>{
+                    this.title = res.description;
+                    this.questionType = res.questionType;
+                    this.questionId = res.questionId; 
+                    this.sequence = res.sequence;
+                    Object.keys(res.question).map((key,i)=>{
+                        this.options.push({label:res.question[key],value:key});
+                    })
+                });
+                this.questionIndex++;
             })
         },
         prevQuestion(){
@@ -137,13 +135,11 @@ export default {
             this.getOtherQuestion();
         },
         getOtherQuestion(){  //最后一题
+            var memberId = localStorage.getItem("memberId");
             if(this.questionIndex == this.questionCount){
-                this.$ajax({
-                    url:`/conference/rest/v1/answer/exam/${this.$parent.examId}/score/end/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}`,
-                    type: 'get',
-                    data: this.questionType == 'SINGLE' ? {userAnswers:[this.singleAnswer]} : {userAnswers:this.multipleAnswer},
-                    success(res){
-                        clearInterval(this.globalTimer);
+                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/score/end/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
+                }).then(res => {
+                    clearInterval(this.globalTimer);
                         this.isEnd = true;
                         this.$router.push({
                             path: 'end',
@@ -151,33 +147,28 @@ export default {
                                 sequence: this.sequence
                             }
                         })
-                    },
-                    error(err){}
+                }).catch(err =>{
                 })
             }else{ 
-                this.$ajax({
-                    url:`/conference/rest/v1/answer/exam/${this.$parent.examId}/score/next/${this.questionId}/${this.questionIndex}?sequence=${this.sequence}`,
-                    type: 'get',
-                    data: this.questionType == 'SINGLE' ? {userAnswers:[this.singleAnswer]} : {userAnswers:this.multipleAnswer},
-                    success(res){
-                        let data = JSON.parse(res);
-                        this.title = data.description;
-                        this.questionType = data.questionType;
-                        this.questionId = data.questionId;
-                        this.options = [];
-                        this.multipleAnswer = [];
-                        Object.keys(data.question).map((key,i)=>{
-                            this.options.push({label:data.question[key],value:key});
-                            data.userChoose&&data.userChoose.map((value,k)=>{
-                                if(data.questionType == 'SINGLE' &&value == key){
-                                    this.singleAnswer = value;
-                                }else if(data.questionType == 'MULTIPLE' &&value == key){
-                                    this.multipleAnswer.push(value);
-                                }
-                            })
-                        });
-                    },
-                    error(err){}
+                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/score/next/${this.questionId}?sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
+                }).then(res => {
+                    let data = JSON.parse(res);
+                    this.title = data.description;
+                    this.questionType = data.questionType;
+                    this.questionId = data.questionId;
+                    this.options = [];
+                    this.multipleAnswer = [];
+                    Object.keys(data.question).map((key,i)=>{
+                        this.options.push({label:data.question[key],value:key});
+                        data.userChoose&&data.userChoose.map((value,k)=>{
+                            if(data.questionType == 'SINGLE' &&value == key){
+                                this.singleAnswer = value;
+                            }else if(data.questionType == 'MULTIPLE' &&value == key){
+                                this.multipleAnswer.push(value);
+                            }
+                        })
+                    });
+                }).catch(err => {
                 })
             }  
         }
@@ -243,9 +234,6 @@ export default {
                 padding: 0;
                 border-radius: 2px;
             }
-            .ms{
-
-            }
             .dw{
                 display: inline-block;
                 font-size: 35px;
@@ -282,47 +270,5 @@ export default {
     0%   {width: 150%; opacity: 0;}
     50%  {opacity: 1;}
     100% {width: 50%;opacity: 0;}
-    }
-</style>
-<style lang="less">
-    .question-doing{
-        .mint-checklist-label{
-            padding: 10px;
-        }
-        .mint-checkbox{
-            display: inline-block;
-            width: 20px;
-        }
-        .mint-checkbox-label{
-            display: inline-block;
-            width: 90%;
-        }
-        .mint-radio{
-            display: inline-block;
-            width: 20px;
-        }
-        .mint-radio-label{
-            display: inline-block;
-            width: 90%;
-        }
-        .mint-radiolist-label{
-            padding: 10px;
-        }
-        .mint-checklist-title{
-            font-size: 20px;
-        }
-        .mint-cell{
-            background-color: transparent;
-        }
-        .mint-cell-wrapper{
-            padding-left: 0;
-            background: #fff;
-        }
-        .mint-cell:last-child{
-            background: #fff;
-        }
-        .mint-radiolist-title{
-            font-size: 20px;
-        }
     }
 </style>

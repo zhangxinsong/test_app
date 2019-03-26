@@ -84,8 +84,8 @@ export default {
                 top: 30px;bottom: 10px;
                 right: 8px;left: 12px;
                 color: #FFF;
-                font-size: 2.6rem;
-                line-height: 22px;
+                font-size: 3.6rem;
+                line-height: 40px;
                 overflow-y: scroll; 
             }
         }
@@ -95,7 +95,7 @@ export default {
             .startExam{
                 display: inline-block;
                 width: 46%;
-                height: 80px;
+                height: 100px;
                 background: url('../../assets/images/question/btn_begin_exam.png');
                 background-size: cover;
                 animation: myfirst 1s infinite linear;

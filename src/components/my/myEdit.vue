@@ -13,7 +13,7 @@
 				</li>
 				<li>
 					<span>真实姓名</span>
-					<input type="text" v-model="name" placeholder="请输入姓名">
+					<input type="text" v-model="name" placeholder="请输入真实姓名">
 				</li>
 				<li>
 					<span>手机号</span>
@@ -25,7 +25,7 @@
 				</li>
 				<li>
 					<span>性别</span>
-					<input type="text" v-model="sex" placeholder="请输入邮箱">
+					<input type="text" v-model="sex" placeholder="请输入性别">
 				</li>
 				<li>
 					<span>生日</span>

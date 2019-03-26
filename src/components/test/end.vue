@@ -20,7 +20,6 @@
             共击败了 <span>{{ num }}</span> 人
         </span>
         <img class="challengeAgain" @click="tryAgain" src='../../assets/images/question/challenge_again.png'>
-        <img class="share" @click="share" src='../../assets/images/question/share_scores.png'>
         <img class="close" @click="close" src='../../assets/images/question/dead_line_close_btn.png'>
     </div>
 </template>
@@ -42,54 +41,34 @@ export default {
     },
     methods: {
         getExamData(){
-            this.$ajax({
-                url:`/conference/rest/v1/answer/exam/result/${this.$parent.examId}?sequence=${this.sequence}`,
-                type: 'get',
-                success(res){
-                    let date = JSON.parse(res);
-                    this.time = date.totalTime;
-                    this.score = date.totalScore;
-                },
-                error(err){
-                }
+            var memberId = localStorage.getItem("memberId");
+            this.$ajax.get(`/rest/v1/answer/exam/result/${this.$parent.examId}?sequence=${this.sequence}&memberId=${memberId}`,{
+            }).then(res => {
+                this.time = res.totalTime;
+                this.score = res.totalScore;
+            }).catch(err => {
+
             })
         },
         getExamBest(){
+            var memberId = localStorage.getItem("memberId");
             if(this.$parent.exam.examType == 'SCORE'){
-                this.$ajax({
-                    url:`/conference/rest/v1/answer/exam/result/${this.$parent.examId}/score/grade?sequence=${this.sequence}`,
-                    type: 'get',
-                    success(res){
-                        let date = JSON.parse(res);
-                        this.num = date.beatNumber;
-                        this.bestScore = date.bestScore;
-                    },
-                    error(err){
-                    }
+                this.$ajax.get(`/rest/v1/answer/exam/result/${this.$parent.examId}/score/grade?sequence=${this.sequence}&memberId=${memberId}`,{
+                }).then(res => {
+                    this.num = res.beatNumber;
+                    this.bestScore = res.bestScore;
+                }).catch(err => {
+
                 })
             }else{
-                this.$ajax({
-                    url:`/conference/rest/v1/answer/exam/result/${this.$parent.examId}/speed/grade?sequence=${this.sequence}`,
-                    type: 'get',
-                    success(res){
-                        let date = JSON.parse(res);
-                        this.num = date.beatNumber;
-                        this.mintime = date.minTime;
-                    },
-                    error(err){
-                    }
+                this.$ajax.get(`/rest/v1/answer/exam/result/${this.$parent.examId}/speed/grade?sequence=${this.sequence}&memberId=${memberId}`,{
+                }).then(res => {
+                    this.num = res.beatNumber;
+                    this.mintime = res.minTime;
+                }).catch(err => {
+
                 })
             } 
-        },
-        share(){
-            this.$parent.showShareBoard = true;
-            this.$parent.rangeData = {
-                title: '答题',
-                zoneTitle: '答题',
-                content: '啦啦啦',
-                url: window.location.href,
-                imgUrl: "https://ykj-yyim-test.oss-cn-beijing.aliyuncs.com/conference/2018/08/31/16/39/a56ab240-d353-4e59-be3b-9585406cfad6.png",
-            };
         },
         tryAgain(){
             this.$router.back();
@@ -112,40 +91,34 @@ export default {
         position: relative;
         .endImg{
             position: absolute;
-            top: 80px;left: 50%;
+            top: 150px;left: 50%;
             width: 200px;
             transform: translateX(-50%);
         }
         .beatnum{
             position: absolute;
-            top: 250px;left: 50%;
+            top: 400px;left: 50%;
             transform: translateX(-50%);
-            width: 250px;
+            width: 60%;
             text-align: center;
             color: #fff;
-            font-size: 20px;
+            font-size: 3.6rem;
             span{
                 color: #f1b42a;
-                font-size: 24px;
+                font-size: 4rem;
                 font-weight: 600; 
             }
         }
         .challengeAgain{
             position: absolute;
-            left: 50%;bottom: 200px;
-            width: 160px;height: 50px;
-            transform: translateX(-50%);
-        }
-        .share{
-            position: absolute;
-            bottom: 130px;left: 50%;
-            width: 160px;height: 50px;
+            left: 50%;bottom: 220px;
+            width: 200px;height: 80px;
             transform: translateX(-50%);
         }
         .close{
             position: absolute;
-            bottom: 60px;left: 50%;
-            width: 160px;height: 50px;
+            bottom: 100px;left: 50%;
+            width: 200px;height: 80px;
             transform: translateX(-50%);
         }
     }
