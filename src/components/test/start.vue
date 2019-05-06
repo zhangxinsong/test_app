@@ -1,7 +1,7 @@
 <template>
     <div class="question-start">
         <div class="examTitle">
-            <img src="../../assets/images/question/exam-name-2018.png">
+            {{this.$parent.exam.name}}
         </div>
         <div class="examRegulation">
             <img src='../../assets/images/question/exam-title-2018.png'>
@@ -57,13 +57,12 @@ export default {
         background: url('../../assets/images/question/exam-bg-2018.png');
         background-size: 100% 100%;
         .examTitle{
-            height: 25%;
+            height: 15%;
             width: 100%;
             text-align: center;
-            img{
-                width: 80%;
-                margin-top: 60px;
-            }
+            font-size: 4.6rem;
+            color: #fff;
+            padding-top: 60px;
         }
         .examRegulation{
             width: 80%;
@@ -95,7 +94,7 @@ export default {
             .startExam{
                 display: inline-block;
                 width: 46%;
-                height: 100px;
+                height: 80px;
                 background: url('../../assets/images/question/btn_begin_exam.png');
                 background-size: cover;
                 animation: myfirst 1s infinite linear;

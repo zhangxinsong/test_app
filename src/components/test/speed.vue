@@ -169,10 +169,10 @@ export default {
                     this.tipWrongTimer()
                 })
             }else{   //下一题
-                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/speed/next/${this.questionId}?totalTime=${this.globalTime*10}&sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
+                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/speed/next/${this.questionId}/${this.questionIndex}?totalTime=${this.globalTime*10}&sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
                 }).then(res => {
                     this.tipRightTimer();
-                    let data = JSON.parse(res);
+                    let data = res;
                     this.title = data.description;
                     this.questionType = data.questionType;
                     this.questionId = data.questionId;

@@ -150,9 +150,9 @@ export default {
                 }).catch(err =>{
                 })
             }else{ 
-                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/score/next/${this.questionId}?sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
+                this.$ajax.get(`/rest/v1/answer/exam/${this.$parent.examId}/score/next/${this.questionId}/${this.questionIndex}?sequence=${this.sequence}&memberId=${memberId}&userAnswers=${this.questionType == 'SINGLE'?[this.singleAnswer]:this.multipleAnswer}`,{
                 }).then(res => {
-                    let data = JSON.parse(res);
+                    let data = res;
                     this.title = data.description;
                     this.questionType = data.questionType;
                     this.questionId = data.questionId;
